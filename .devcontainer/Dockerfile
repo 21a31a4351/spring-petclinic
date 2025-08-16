@@ -1,7 +1,5 @@
 FROM maven:3.9.11-eclipse-temurin-17 AS build
-RUN git clone git@github.com:21a31a4351/spring-petclinic.git && \
-    cd spring-petclinic && \
-    mvn package
+RUN git clone git@github.com:21a31a4351/spring-petclinic.git  &&  cd spring-petclinic  &&  mvn package
 
 FROM eclipse-temurin:17.0.16_8-jre-ubi9-minimal AS runtime
 RUN adduser -m -d /usr/share/demo -s /bin/bash testuser
