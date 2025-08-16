@@ -1,11 +1,12 @@
-# Not actually used by the devcontainer, but it is used by gitpod
-ARG VARIANT=17-bullseye
-FROM mcr.microsoft.com/vscode/devcontainers/java:0-${VARIANT}
-ARG NODE_VERSION="none"
-RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
-ARG USER=vscode
-VOLUME /home/$USER/.m2
-VOLUME /home/$USER/.gradle
-ARG JAVA_VERSION=17.0.7-ms
-RUN sudo mkdir /home/$USER/.m2 /home/$USER/.gradle && sudo chown $USER:$USER /home/$USER/.m2 /home/$USER/.gradle
-RUN bash -lc '. /usr/local/sdkman/bin/sdkman-init.sh && sdk install java $JAVA_VERSION && sdk use java $JAVA_VERSION'
+FROM maven:3.9.11-eclipse-temurin-17 AS build
+RUN git clone git@github.com:21a31a4351/spring-petclinic.git && \
+    cd spring-petclinic && \
+    mvn package
+
+FROM eclipse-temurin:17.0.16_8-jre-ubi9-minimal AS runtime
+RUN adduser -m -d /usr/share/demo -s /bin/bash testuser
+USER testuser
+WORKDIR /usr/share/demo
+copy --from=build /spring-petclinic/target/*.jar kishore.jar
+EXPOSE 8080/tcp
+CMD ["java","-jar","kishore.jar"]
