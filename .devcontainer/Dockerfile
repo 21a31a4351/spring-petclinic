@@ -9,4 +9,4 @@ FROM tomcat:9.0
 COPY --from=build /spring-petclinic/target/*.war /usr/local/tomcat/webapps/petclinic.war
 # CMD ["catalina.sh", "run"]
 EXPOSE 8080/tcp
-CMD ["java","-jar","kishore.jar"]
+CMD ["java","-war","kishore.war"]
