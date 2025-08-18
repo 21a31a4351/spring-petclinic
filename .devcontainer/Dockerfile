@@ -7,6 +7,6 @@ USER testuser
 WORKDIR /usr/share/demo
 FROM tomcat:9.0
 COPY --from=build /spring-petclinic/target/*.war /usr/local/tomcat/webapps/petclinic.war
-# CMD ["catalina.sh", "run"]
+CMD ["catalina.sh", "run"]
 EXPOSE 8080/tcp
-CMD ["java","-war","kishore.war"]
+# CMD ["java","-war","kishore.war"]
